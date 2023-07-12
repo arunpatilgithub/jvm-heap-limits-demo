@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jvm-heap-limits-demo-app-v1
+  labels:
+    app: jvm-heap-limits-demo-v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jvm-heap-limits-demo-v1
+  template:
+    metadata:
+      labels:
+        app: jvm-heap-limits-demo-v1
+    spec:
+      containers:
+        - name: jvm-heap-limits-demo-v1
+          image: jvm-heap-limits-demo-v1
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sh", "-c", "sleep 5" ]
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: 250Mi
+            limits:
+              memory: 500Mi
